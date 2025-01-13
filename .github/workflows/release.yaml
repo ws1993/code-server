@@ -138,8 +138,6 @@ jobs:
             package-lock.json
             test/package-lock.json
 
-      - run: SKIP_SUBMODULE_DEPS=1 npm ci
-
       - name: Install cross-compiler and system dependencies
         run: |
           dpkg --add-architecture $TARGET_ARCH
@@ -151,7 +149,10 @@ jobs:
             libsecret-1-dev:$TARGET_ARCH \
             libkrb5-dev:$TARGET_ARCH \
             ca-certificates \
-            curl wget rsync gettext-base
+            curl wget rsync gettext-base \
+            python3
+
+      - run: SKIP_SUBMODULE_DEPS=1 npm ci
 
       - name: Install nfpm
         run: |
@@ -195,6 +196,9 @@ jobs:
     runs-on: macos-latest
     timeout-minutes: 15
     needs: npm-version
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
