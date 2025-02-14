@@ -71,11 +71,11 @@ Index: code-server/lib/vscode/src/vs/server/node/webClientServer.ts
 ===================================================================
 --- code-server.orig/lib/vscode/src/vs/server/node/webClientServer.ts
 +++ code-server/lib/vscode/src/vs/server/node/webClientServer.ts
-@@ -315,6 +315,7 @@ export class WebClientServer {
- 			rootEndpoint: base,
- 			updateEndpoint: !this._environmentService.args['disable-update-check'] ? base + '/update/check' : undefined,
- 			logoutEndpoint: this._environmentService.args['auth'] && this._environmentService.args['auth'] !== "none" ? base + '/logout' : undefined,
-+			proxyEndpointTemplate: process.env.VSCODE_PROXY_URI ?? base + '/proxy/{{port}}/',
+@@ -343,6 +343,7 @@ export class WebClientServer {
+ 			rootEndpoint: rootBase,
+ 			updateEndpoint: !this._environmentService.args['disable-update-check'] ? rootBase + '/update/check' : undefined,
+ 			logoutEndpoint: this._environmentService.args['auth'] && this._environmentService.args['auth'] !== "none" ? rootBase + '/logout' : undefined,
++			proxyEndpointTemplate: process.env.VSCODE_PROXY_URI ?? rootBase + '/proxy/{{port}}/',
  			embedderIdentifier: 'server-distro',
  			extensionsGallery: this._productService.extensionsGallery,
  		} satisfies Partial<IProductConfiguration>;
@@ -104,7 +104,7 @@ Index: code-server/lib/vscode/src/vs/code/browser/workbench/workbench.ts
  import type { IURLCallbackProvider } from '../../../workbench/services/url/browser/urlService.js';
  import { create } from '../../../workbench/workbench.web.main.internal.js';
  
-@@ -571,6 +572,39 @@ class WorkspaceProvider implements IWork
+@@ -584,6 +585,39 @@ class WorkspaceProvider implements IWork
  		settingsSyncOptions: config.settingsSyncOptions ? { enabled: config.settingsSyncOptions.enabled, } : undefined,
  		workspaceProvider: WorkspaceProvider.create(config),
  		urlCallbackProvider: new LocalStorageURLCallbackProvider(config.callbackRoute),
@@ -148,7 +148,7 @@ Index: code-server/lib/vscode/src/vs/workbench/contrib/remote/browser/remoteExpl
 ===================================================================
 --- code-server.orig/lib/vscode/src/vs/workbench/contrib/remote/browser/remoteExplorer.ts
 +++ code-server/lib/vscode/src/vs/workbench/contrib/remote/browser/remoteExplorer.ts
-@@ -77,8 +77,8 @@ export class ForwardedPortsView extends
+@@ -83,8 +83,8 @@ export class ForwardedPortsView extends
  	private async enableForwardedPortsFeatures() {
  		this.contextKeyListener.clear();
  

@@ -54,23 +54,14 @@ Index: code-server/lib/vscode/src/vs/server/node/webClientServer.ts
 ===================================================================
 --- code-server.orig/lib/vscode/src/vs/server/node/webClientServer.ts
 +++ code-server/lib/vscode/src/vs/server/node/webClientServer.ts
-@@ -327,6 +327,7 @@ export class WebClientServer {
+@@ -355,6 +355,7 @@ export class WebClientServer {
  		const workbenchWebConfiguration = {
  			remoteAuthority,
- 			serverBasePath: this._basePath,
-+			webviewEndpoint: vscodeBase + this._staticRoute + '/out/vs/workbench/contrib/webview/browser/pre',
+ 			serverBasePath: basePath,
++			webviewEndpoint: staticRoute + '/out/vs/workbench/contrib/webview/browser/pre',
  			_wrapWebWorkerExtHostInIframe,
  			developmentOptions: { enableSmokeTestDriver: this._environmentService.args['enable-smoke-test-driver'] ? true : undefined, logLevel: this._logService.getLevel() },
  			settingsSyncOptions: !this._environmentService.isBuilt && this._environmentService.args['enable-sync'] ? { enabled: true } : undefined,
-@@ -386,7 +387,7 @@ export class WebClientServer {
- 			return void res.end('Not found');
- 		}
- 
--		const webWorkerExtensionHostIframeScriptSHA = isESM ? 'sha256-2Q+j4hfT09+1+imS46J2YlkCtHWQt0/BE79PXjJ0ZJ8=' : 'sha256-V28GQnL3aYxbwgpV3yW1oJ+VKKe/PBSzWntNyH8zVXA=';
-+		const webWorkerExtensionHostIframeScriptSHA = isESM ? 'sha256-2Q+j4hfT09+1+imS46J2YlkCtHWQt0/BE79PXjJ0ZJ8=' : 'sha256-TMJESLUenkUgTCHw3qQlCngteoHhhRnn81kYP41UnCE=';
- 
- 		const cspDirectives = [
- 			'default-src \'self\';',
 Index: code-server/lib/vscode/src/vs/workbench/contrib/webview/browser/pre/index.html
 ===================================================================
 --- code-server.orig/lib/vscode/src/vs/workbench/contrib/webview/browser/pre/index.html
@@ -122,12 +113,12 @@ Index: code-server/lib/vscode/src/vs/workbench/services/extensions/worker/webWor
  		<meta http-equiv="Content-Security-Policy" content="
  			default-src 'none';
  			child-src 'self' data: blob:;
--			script-src 'self' 'unsafe-eval' 'sha256-++yLFGtZAMsPOtftkIktNKpSEupSQGmZufZGVEWmSu4=' https: http://localhost:* blob:;
-+			script-src 'self' 'unsafe-eval' 'sha256-4rX2QD6B1/qCqKZwkDoccbNoTT5ydjfFAztSSpcJKt0=' https: http://localhost:* blob:;
+-			script-src 'self' 'unsafe-eval' 'sha256-cl8ijlOzEe+0GRCQNJQu2k6nUQ0fAYNYIuuKEm72JDs=' https: http://localhost:* blob:;
++			script-src 'self' 'unsafe-eval' 'sha256-yhZXuB8LS6t73dvNg6rtLX8y4PHLnqRm5+6DdOGkOcw=' https: http://localhost:* blob:;
  			connect-src 'self' https: wss: http://localhost:* http://127.0.0.1:* ws://localhost:* ws://127.0.0.1:*;"/>
  	</head>
  	<body>
-@@ -23,6 +23,13 @@
+@@ -25,6 +25,13 @@
  			// validation not requested
  			return start();
  		}
